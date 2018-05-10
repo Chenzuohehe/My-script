@@ -28,7 +28,6 @@ def login():
     driver.implicitly_wait(30)
     driver.get(
         "https://idmsa.apple.com/IDMSWebAuth/login?appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2Faccount%2F&rv=1")
-
     elem = driver.find_element_by_id("accountname")
     elem.send_keys(appleID)
 
@@ -197,15 +196,15 @@ def addNewApp():
 
 if __name__ == '__main__':
     login()
-    openCIP()
-    creatAppId() #生成appid
-    addCertificates(0)#生成开发证书
-    addCertificates(1)  # 生成开发推送证书
-    addCertificates(2)#生成发布推送证书
-    addCertificates(3)  # 生成发布推送证书
-    addDevices() #根据txt地址添加UDID
-    addProfiles(0) #生成开发配置文件
-    addProfiles(2) #生成生产配置文件
+    # openCIP()
+    # creatAppId() #生成appid
+    # addCertificates(0)#生成开发证书
+    # addCertificates(1)  # 生成开发推送证书
+    # addCertificates(2)#生成发布推送证书
+    # addCertificates(3)  # 生成发布推送证书
+    # addDevices() #根据txt地址添加UDID
+    # addProfiles(0) #生成开发配置文件
+    # addProfiles(2) #生成生产配置文件
 
     # openiTunesConnect()
     # addNewApp() #创建新APP
