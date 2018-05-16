@@ -1,42 +1,25 @@
 # -*- coding: utf-8 -*-
 #encoding=utf-8
-# 目标：根据提供的1024 像素的图生成对应的图还有名字
-# https://blog.csdn.net/Richie_ll/article/details/69206210
+# 目标：根据提供的图生成对应像素的图还有名字
 
-
-#导入模块
 from PIL import Image
-import os
-#读取文件
-im_path = r'/Users/chenzuo/Desktop/test.png' #原图地址
 
+im_path = r'/Users/chenzuo/Desktop/icon1024.png' #原图地址
 baseP = "/Users/chenzuo/Desktop" #保存地址
-
-iconFile = "/Users/chenzuo/Desktop"
-sizes = []
-fileNames = []
+sizes = [20,29,40,50,57,58,60,72,76,80,87,100,114,120,144,152,167,180,1024]
 
 im = Image.open(im_path)
 
-
-def listdir():
-    dirfile = os.listdir(iconFile)
-    names = []
-    for filename in dirfile:
-        if not filename.startswith('.'):
-            names.append(filename)
-    fileNames = names
-
-def resizeIcon():
-    for i in len(sizes):
-        size = sizes[i]
-        filename = fileNames[i]
-        re = im.resize((size, size))
-        re.save(r'%s/%s' %(baseP, filename))
+def makeIcons():
+    for i in range(len(sizes)):
+        resizedIm = im.resize((sizes[i], sizes[i]))
+        name = "%s/_%s.png" % (baseP, sizes[i])
+        # print (name)
+        resizedIm.save(name)
 
 if __name__ == "__main__":
-    listdir()
-    resizeIcon()
+    makeIcons()
+
 
 
 
