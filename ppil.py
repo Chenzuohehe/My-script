@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-# 目标：根据提供的1024 像素的图生成对应的图还有名字
+# 目标：根据提供的图生成对应的图还有名字
 # https://blog.csdn.net/Richie_ll/article/details/69206210
 
 
 #导入模块
 from PIL import Image, ImageFilter
+import os
 #读取文件
 im_path = r'/Users/chenzuo/Desktop/test.png'
 im = Image.open(im_path)

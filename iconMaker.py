@@ -5,7 +5,7 @@
 from PIL import Image
 
 im_path = r'/Users/chenzuo/Desktop/icon1024.png' #原图地址
-baseP = "/Users/chenzuo/Desktop" #保存地址
+baseP = "/Users/chenzuo/Desktop/icons" #保存地址
 sizes = [20,29,40,50,57,58,60,72,76,80,87,100,114,120,144,152,167,180,1024]
 
 im = Image.open(im_path)
@@ -19,12 +19,4 @@ def makeIcons():
 
 if __name__ == "__main__":
     makeIcons()
-
-
-
-
-
-
-
-
 
