@@ -13,6 +13,8 @@ import poplib
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
+from openpyxl.styles import Font, Color
+
 
 excel_patch = "/Users/chenzuo/Desktop/松鼠游戏苹果后台(1).xlsx"
 sheet_name = "松鼠后台"
@@ -21,6 +23,7 @@ class email_model:
     user_name = ""
     pass_word = ""
     froms = []
+    dates = []
     subjects = []
 
 
@@ -50,6 +53,8 @@ def set_users_passwords(start_cow, end_cow):
 
 def login_email(user_list, password_list):
 
+    email_objects = []
+
     for i in range(0, len(user_list)):
 
         username = user_list[i]
@@ -76,26 +81,29 @@ def login_email(user_list, password_list):
         index = len(mails)
 
         froms = []
+        dates = []
         subjects = []
-        for i in range(1, index + 1):
+
+        # 倒叙查看最新邮件
+        for i in range(index, 0, -1):
             resp, lines, octets = pp.retr(i)
             msg_content = b'\r\n'.join(lines).decode('utf-8')
             msg = Parser().parsestr(msg_content)
-            from_str, subject_str = print_info(msg)
+            from_str,date, subject_str = print_info(msg)
             froms.append(from_str)
+            dates.append(date)
             subjects.append(subject_str)
 
         email_object = email_model()
         email_object.user_name = username
         email_object.pass_word = password
         email_object.froms = froms
+        email_object.dates = dates
         email_object.subjects = subjects
-
-
-        creat_excel(email_object)
+        email_objects.append(email_object)
 
         pp.quit()
-
+    creat_excel(email_objects)
 
 
 def guess_charset(msg):
@@ -115,15 +123,18 @@ def decode_str(s):
 
 def print_info(msg, indent=0):
     from_str = ""
+    date_str = ""
     subject_str = ""
 
     if indent == 0:
-        for header in ['From', 'Subject']:
+        for header in ['From', 'Subject', 'Date']:
             value = msg.get(header, '')
+
             if value:
                 if header=='Subject':
                     value = decode_str(value)
-
+                elif header=='Date':
+                    value = decode_str(value)
                 else:
                     hdr, addr = parseaddr(value)
                     name = decode_str(hdr)
@@ -131,34 +142,63 @@ def print_info(msg, indent=0):
             # print('%s%s: %s' % ('  ' * indent, header, value))
             if header == "From":
                 from_str = value
+            elif header == 'Date':
+                date_str = value
             else:
                 subject_str = value
-    return (from_str, subject_str)
+    return (from_str,date_str, subject_str)
 
 # 生成表格
-def creat_excel(email_object):
+def creat_excel(email_objects):
 
-    titile_list = ["邮箱名称","密码","来自","标题"]
+    titile_list = ["邮箱名称","密码","来自","时间","标题"]
 
     work_book = Workbook()
     book_sheet = work_book.active
     book_sheet.append(titile_list)
 
-    length = len(email_object.froms)
-    for i in range(0, length):
-        line_list = []
-        if i == 0:
-            line_list.append(email_object.user_name)
-            line_list.append(email_object.pass_word)
-        else:
-            line_list.append("")
-            line_list.append("")
-        line_list.append(email_object.froms[i])
-        line_list.append(email_object.subjects[i])
-        book_sheet.append(line_list)
+    # 邮件添加内容
+    max_row = 1
+    max_col = len(titile_list)
+
+    for email_object in email_objects:
+        length = len(email_object.froms)
+        for i in range(0, length):
+            line_list = []
+            if i == 0:
+                line_list.append(email_object.user_name)
+                line_list.append(email_object.pass_word)
+            else:
+                line_list.append("")
+                line_list.append("")
+            line_list.append(email_object.froms[i])
+            line_list.append(email_object.dates[i])
+            line_list.append(email_object.subjects[i])
+            book_sheet.append(line_list)
+            max_row += 1
+
+    # 设置自适应宽度
+    for column_index in range(1, max_col + 1):
+        maxWidth = 0
+        for row_index in range(1, max_row + 1):
+            value = book_sheet.cell(row=row_index, column=column_index).value
+            if isinstance(value, int):
+                value = str(value)  # 将中间int类型改变
+            chineseNum = (len(value.encode('utf-8')) - len(value)) / 2
+            width = len(value.encode('utf-8')) - chineseNum + 4  # +4 留下多余空间
+            if width > maxWidth:
+                maxWidth = width
+        codeAsc = ord(str(column_index)) + 16
+        book_sheet.column_dimensions[chr(codeAsc)].width = maxWidth
+
+    # 发件人名称或者邮件包含apple 一律红色字
+    for i in range(1, max_row + 1):
+        path = "C" + str(i)
+        sheet_obj = book_sheet[path]
+        if "apple" in sheet_obj.value:
+            sheet_obj.font = Font(color=colors.RED)
+
     work_book.save("查看邮件" + ".xlsx")
-
-
 
 
 
@@ -166,5 +206,5 @@ def creat_excel(email_object):
 if __name__ == '__main__':
     user_list = []
     password_list = []
-    user_list, password_list = set_users_passwords(22,23)
+    user_list, password_list = set_users_passwords(22,27)
     login_email(user_list, password_list)
