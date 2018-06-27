@@ -2,6 +2,9 @@
 #encoding=utf-8
 # 目标：根据读取excel的账号密码，登录邮箱，读取邮件标题，收件时间。询问是否打开邮箱
 
+# 126密码在旁边 yehoo，gamil好像国外的有点行不通？
+
+
 import xlrd
 from datetime import date,datetime
 from email.parser import Parser
@@ -14,6 +17,7 @@ import poplib
 from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl.styles import Font, Color
+from openpyxl.styles import colors
 
 
 excel_patch = "/Users/chenzuo/Desktop/松鼠游戏苹果后台(1).xlsx"
@@ -62,37 +66,53 @@ def login_email(user_list, password_list):
 
         # host拼接
         # host = "pop.yeah.net"
-        path_index = username.find('@')
-        host = "pop." + username[(path_index + 1):len(username)]
 
-        # 创建一个pop3对象，这个时候实际上已经连接上服务器了
-        pp = poplib.POP3(host)
-        # 设置调试模式，可以看到与服务器的交互信息
-        pp.set_debuglevel(1)
-        # 向服务器发送用户名
-        pp.user(username)
-        # 向服务器发送密码
-        pp.pass_(password)
-        # 获取服务器上信件信息，返回是一个列表，第一项是一共有多上封邮件，第二项是共有多少字节
-
-        resp, mails, octets = pp.list()
-        # 可以查看返回的列表类似[b'1 82923', b'2 2184', ...]
-        # 获取最新一封邮件, 注意索引号从1开始:
-        index = len(mails)
 
         froms = []
         dates = []
         subjects = []
 
-        # 倒叙查看最新邮件
-        for i in range(index, 0, -1):
-            resp, lines, octets = pp.retr(i)
-            msg_content = b'\r\n'.join(lines).decode('utf-8')
-            msg = Parser().parsestr(msg_content)
-            from_str,date, subject_str = print_info(msg)
-            froms.append(from_str)
-            dates.append(date)
-            subjects.append(subject_str)
+        # 容错
+        try:
+            path_index = username.find('@')
+            com_path = username.find('.com')
+            # 去除.com后面的多余东西
+            host = "pop." + username[(path_index + 1):(com_path + 4)]
+
+            if host == "pop.gamil.com":
+                print "我gamil被墙了"
+            elif host == "pop.yahoo.com":
+                print "我yahoo登不上去"
+            else:
+                # 创建一个pop3对象，这个时候实际上已经连接上服务器了
+                pp = poplib.POP3(host)
+                # 设置调试模式，可以看到与服务器的交互信息
+                pp.set_debuglevel(1)
+                # 向服务器发送用户名
+                pp.user(username)
+                # 向服务器发送密码
+                pp.pass_(password)
+                # 获取服务器上信件信息，返回是一个列表，第一项是一共有多上封邮件，第二项是共有多少字节
+
+                resp, mails, octets = pp.list()
+                # 可以查看返回的列表类似[b'1 82923', b'2 2184', ...]
+                # 获取最新一封邮件, 注意索引号从1开始:
+                index = len(mails)
+
+                # 倒叙查看最新邮件
+                for i in range(index, 0, -1):
+                    resp, lines, octets = pp.retr(i)
+                    msg_content = b'\r\n'.join(lines).decode('utf-8')
+                    msg = Parser().parsestr(msg_content)
+                    from_str, date, subject_str = print_info(msg)
+                    froms.append(from_str)
+                    dates.append(date)
+                    subjects.append(subject_str)
+
+                pp.quit()
+
+        except:
+            print (username, password, "---------------当前邮箱错误---------------------")
 
         email_object = email_model()
         email_object.user_name = username
@@ -102,7 +122,6 @@ def login_email(user_list, password_list):
         email_object.subjects = subjects
         email_objects.append(email_object)
 
-        pp.quit()
     creat_excel(email_objects)
 
 
@@ -163,6 +182,14 @@ def creat_excel(email_objects):
 
     for email_object in email_objects:
         length = len(email_object.froms)
+        # 这边是错误的邮箱
+        if length == 0:
+            line_list = []
+            line_list.append(email_object.user_name)
+            line_list.append(email_object.pass_word)
+            book_sheet.append(line_list)
+            max_row += 1
+
         for i in range(0, length):
             line_list = []
             if i == 0:
@@ -206,5 +233,6 @@ def creat_excel(email_objects):
 if __name__ == '__main__':
     user_list = []
     password_list = []
-    user_list, password_list = set_users_passwords(22,27)
+    user_list, password_list = set_users_passwords(15,59)
     login_email(user_list, password_list)
+
