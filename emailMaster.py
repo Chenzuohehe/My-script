@@ -75,14 +75,17 @@ def login_email(user_list, password_list):
         # 容错
         try:
             path_index = username.find('@')
-            com_path = username.find('.com')
-            # 去除.com后面的多余东西
-            host = "pop." + username[(path_index + 1):(com_path + 4)]
+            point_path = username.find('.')
+            # 去除.后面的多余东西
+            host = "pop." + username[(path_index + 1):(point_path + 4)]
+            print (host)
 
-            if host == "pop.gamil.com":
-                print "我gamil被墙了"
+            if host == "pop.gmail.com":
+                print ("我gamil被墙了")
+                continue
             elif host == "pop.yahoo.com":
-                print "我yahoo登不上去"
+                print ("我yahoo登不上去")
+                continue
             else:
                 # 创建一个pop3对象，这个时候实际上已经连接上服务器了
                 pp = poplib.POP3(host)
@@ -209,12 +212,14 @@ def creat_excel(email_objects):
         maxWidth = 0
         for row_index in range(1, max_row + 1):
             value = book_sheet.cell(row=row_index, column=column_index).value
-            if isinstance(value, int):
-                value = str(value)  # 将中间int类型改变
-            chineseNum = (len(value.encode('utf-8')) - len(value)) / 2
-            width = len(value.encode('utf-8')) - chineseNum + 4  # +4 留下多余空间
-            if width > maxWidth:
-                maxWidth = width
+            if value:
+                if isinstance(value, int):
+                    value = str(value)  # 将中间int类型改变
+                chineseNum = (len(value.encode('utf-8')) - len(value)) / 2
+                width = len(value.encode('utf-8')) - chineseNum + 4  # +4 留下多余空间
+                if width > maxWidth:
+                    maxWidth = width
+
         codeAsc = ord(str(column_index)) + 16
         book_sheet.column_dimensions[chr(codeAsc)].width = maxWidth
 
@@ -222,8 +227,10 @@ def creat_excel(email_objects):
     for i in range(1, max_row + 1):
         path = "C" + str(i)
         sheet_obj = book_sheet[path]
-        if "apple" in sheet_obj.value:
-            sheet_obj.font = Font(color=colors.RED)
+
+        if sheet_obj.value:
+            if "apple" in sheet_obj.value:
+                sheet_obj.font = Font(color=colors.RED)
 
     work_book.save("查看邮件" + ".xlsx")
 
@@ -233,6 +240,8 @@ def creat_excel(email_objects):
 if __name__ == '__main__':
     user_list = []
     password_list = []
-    user_list, password_list = set_users_passwords(15,59)
+    user_list, password_list = set_users_passwords(14,59)
     login_email(user_list, password_list)
+
+
 
