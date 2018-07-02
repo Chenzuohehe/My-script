@@ -12,13 +12,13 @@ def set_x_y_z():
 	z_list = []
 
 	# 读取excel
-	ExcelFile = xlrd.open_workbook("/Users/chenzuo/Desktop/数据3.xlsx")  # 获取目标EXCEL文件sheet名
+	ExcelFile = xlrd.open_workbook("/Users/chenzuo/Desktop/数据3.xlsx")
 	sheet = ExcelFile.sheet_by_name("Sheet1")
 	
 	row_num = sheet.row_values(0)
 	col_num = sheet.col_values(0)
-	
-	# 取出三千个数据
+
+	# 读取数据
 	for i in range(2,len(row_num)):
 		x = sheet.cell(0, i).value
 		
@@ -29,8 +29,7 @@ def set_x_y_z():
 			x_list.append(x)
 			y_list.append(y)
 			z_list.append(z)
-	
-	# 不是list 是一个特别的类似list的？？？不懂，抄的
+
 	x_list = np.array(x_list)
 	y_list = np.array(y_list)
 	z_list = np.array(z_list)
