@@ -7,16 +7,16 @@ import time
 # sleep
 
 # 目标苹果开发者账户然后创建证书，添加UDID，添加B ID，生成配置文件
-# 现在想做的是因为是不是会因为网页加载问题终端，我需要自动输出在哪一步中断，如何如何继续进行？
 
-appleID = "xxxxx@yeah.net"
-password = "xxxxx"
+
+appleID = ""
+password = ""
 CRSfilePath = "/Users/chenzuo/Desktop/CertificateSigningRequest.certSigningRequest"
-appName = "xxxxx"
-aName = "xxxx"
+appName = ""
+aName = ""
 bundleID = "com." + appName + "." + aName
-appChineseName = "xxx"
-udids = ["/Users/chenzuo/Desktop/松鼠测试人员udid.txt"]
+appChineseName = ""
+udids = [""]
 
 waitSec = 6
 
@@ -116,7 +116,7 @@ def addDevices():
         time.sleep(waitSec)
         driver.find_element_by_xpath("//*[@class='button small right navLink']").click()
 
-# 生成配置文件 index 0：开发配置文件 1：hoc配置文件 2：生产配置文件
+# 生成配置文件 index 0：开发配置文件 4：hoc配置文件 2：生产配置文件
 def addProfiles(index):
     driver.find_element_by_xpath("//*[@data-link='/account/ios/profile/']").click()
     time.sleep(waitSec)
@@ -130,20 +130,20 @@ def addProfiles(index):
     time.sleep(waitSec)
     driver.find_element_by_xpath("//*[@class='button small blue right submit']").click()
     time.sleep(waitSec)
-    if index == 2:
-
+    if index == 2 or index == 4:
         driver.find_element_by_xpath("//*[@name='certificateIds']").click()
-    else:
+    elif index == 0:
         driver.find_element_by_xpath("//*[@id='selectAllCId']").click()
 
     driver.find_element_by_xpath("//*[@class='button small blue right submit']").click()
     time.sleep(waitSec)
 
-    if index != 2:
+    if index == 0 or index == 4:
         time.sleep(waitSec)
         driver.find_element_by_xpath("//*[@id='selectAllDId']").click()
         time.sleep(waitSec)
         driver.find_element_by_xpath("//*[@class='button small blue right submit']").click()
+
 
     time.sleep(waitSec)
     suffix = ""
@@ -151,7 +151,7 @@ def addProfiles(index):
         suffix = "_dev"
     elif index == 2:
         suffix = "_dis"
-    else:
+    elif index == 4:
         suffix = "_hoc"
     driver.find_element_by_name("provisioningProfileName").send_keys(aName + suffix)
     time.sleep(waitSec)
@@ -205,24 +205,27 @@ def addNewApp():
     time.sleep(waitSec*1.5)
 
 if __name__ == '__main__':
+    print(bundleID)
+
     login()
     openCIP()
-    #
-    # creatAppId() #生成appid
-    #
-    # ceartCeetificates(0)#生成开发证书
-    # ceartCeetificates(2)#生成发布证书
-    #
-    # # ceartCeetificates(1)  # 生成开发推送证书
-    # # ceartCeetificates(3)  # 生成发布推送证书
-    # #
-    # addDevices() #根据txt地址添加UDID
-    #
+
+    creatAppId() #生成appid
+    addDevices()  # 根据txt地址添加UDID
+
+    ceartCeetificates(0)#生成开发证书
+    ceartCeetificates(2)#生成发布证书
+
+    # ceartCeetificates(1)  # 生成开发推送证书
+    ceartCeetificates(3)  # 生成发布推送证书
+
     addProfiles(0) #生成开发配置文件
     addProfiles(2) #生成生产配置文件
-
+    addProfiles(4) #生成Hoc配置文件
     # openiTunesConnect()
     # addNewApp()
+
+
 
 
 
