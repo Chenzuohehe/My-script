@@ -223,14 +223,33 @@ def creat_excel(email_objects):
         codeAsc = ord(str(column_index)) + 16
         book_sheet.column_dimensions[chr(codeAsc)].width = maxWidth
 
-    # 发件人名称或者邮件包含apple 一律红色字
-    for i in range(1, max_row + 1):
-        path = "C" + str(i)
-        sheet_obj = book_sheet[path]
 
-        if sheet_obj.value:
-            if "apple" in sheet_obj.value:
-                sheet_obj.font = Font(color=colors.RED)
+    def find_key_world(key_word, col_char, color):
+
+        for i in range(1, max_row + 1):
+            path = col_char + str(i)
+            sheet_obj = book_sheet[path]
+            if sheet_obj.value:
+                if key_word in sheet_obj.value:
+                    sheet_obj.font = Font(color=color)
+
+        # if sheet_obj.value:
+        #     if key_word in sheet_obj.value:
+        #         sheet_obj.font = Font(color=color)
+
+    # 发件人名称或者邮件包含apple 一律红色字
+    # for i in range(1, max_row + 1):
+    #     path = "C" + str(i)
+    #     sheet_obj = book_sheet[path]
+    #
+    #     if sheet_obj.value:
+    #         if "apple" in sheet_obj.value:
+    #             sheet_obj.font = Font(color=colors.RED)
+
+    find_key_world("apple", "C", colors.RED)
+    find_key_world("限时", "E", "4169E1")
+
+    # 当标题里面包含Notice of Termination 标色
 
     work_book.save("查看邮件" + ".xlsx")
 
@@ -240,7 +259,7 @@ def creat_excel(email_objects):
 if __name__ == '__main__':
     user_list = []
     password_list = []
-    user_list, password_list = set_users_passwords(14,59)
+    user_list, password_list = set_users_passwords(15,60)
     login_email(user_list, password_list)
 
 
