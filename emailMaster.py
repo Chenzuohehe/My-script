@@ -247,7 +247,7 @@ def creat_excel(email_objects):
     #             sheet_obj.font = Font(color=colors.RED)
 
     find_key_world("apple", "C", colors.RED)
-    find_key_world("限时", "E", "4169E1")
+    find_key_world("Notice of Termination", "E", "4169E1")
 
     # 当标题里面包含Notice of Termination 标色
 
