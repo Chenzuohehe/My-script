@@ -9,29 +9,34 @@ import time
 # 目标苹果开发者账户然后创建证书，添加UDID，添加B ID，生成配置文件
 
 
-appleID = ""
-password = ""
-CRSfilePath = "/Users/chenzuo/Desktop/CertificateSigningRequest.certSigningRequest"
-appName = ""
-aName = ""
+appleID = "xiaozhi576753@163.com"
+password = "Gg104123"
+CRSfilePath = "/Users/chenzuo/Desktop/udid集合/CertificateSigningRequest.certSigningRequest"
+appName = "jiuzhoumilingji"
+aName = "jzmlj"
 bundleID = "com." + appName + "." + aName
-appChineseName = ""
-udids = [""]
+appChineseName = "九州觅灵记"
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/太古udid.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/青云诀.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/百战UDID.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/老爷UDID.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/逐鹿UDID.txt"]
+udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/苍穹灭UDID.txt"]
+
 
 waitSec = 6
 
 driver = webdriver.Chrome()
 
 # browser = webdriver.Safari()
-# browser.get('http://weibo.com')
 
 
 # 登录开发者账号
 def login():
     # 隐式等待 全局的
     driver.implicitly_wait(30)
-    driver.get(
-        "https://idmsa.apple.com/IDMSWebAuth/login?appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2Faccount%2F&rv=1")
+    driver.get("https://idmsa.apple.com/IDMSWebAuth/login?appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2Faccount%2F&rv=1")
     elem = driver.find_element_by_id("accountname")
     elem.send_keys(appleID)
 
@@ -45,7 +50,7 @@ def login():
 # 打开CIP
 def openCIP():
     driver.find_element_by_xpath("//*[@data-menu-option='cip']").click()
-    # 找到CIP  Certificates, IDs & Profiles 点击
+    # 找到eCIP  Certificates, IDs & Profiles 点击
     time.sleep(waitSec)
 
 # 创建证书 index: 0：开发证书 1：开发推送证书 2：生成发布证书 3：发布推送证书
@@ -110,9 +115,9 @@ def addDevices():
         time.sleep(waitSec)
         driver.find_element_by_name("upload").send_keys(path)
         time.sleep(waitSec)
-        driver.find_element_by_xpath("//*[@class='button small blue right submit']").click()
+        driver.find_element_by_xpath("//*[@class='button small blue right ']").click()
         time.sleep(waitSec)
-        driver.find_element_by_xpath("//*[@class='button small blue right submit']").click()
+        driver.find_element_by_xpath("//*[@class='button small blue right ']").click()
         time.sleep(waitSec)
         driver.find_element_by_xpath("//*[@class='button small right navLink']").click()
 
@@ -210,14 +215,14 @@ if __name__ == '__main__':
     login()
     openCIP()
 
-    creatAppId() #生成appid
+    # creatAppId() #生成appid
     addDevices()  # 根据txt地址添加UDID
 
     ceartCeetificates(0)#生成开发证书
     ceartCeetificates(2)#生成发布证书
 
     # ceartCeetificates(1)  # 生成开发推送证书
-    ceartCeetificates(3)  # 生成发布推送证书
+    # ceartCeetificates(3)  # 生成发布推送证书
 
     addProfiles(0) #生成开发配置文件
     addProfiles(2) #生成生产配置文件
