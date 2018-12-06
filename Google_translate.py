@@ -2,7 +2,7 @@ import execjs
 import urllib
 import urllib.request
 
-file_Path = "/Users/chenzuo/Desktop/saoce shooter STR/01-Setting up the project.srt";
+file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/01-Setting up the project.srt";
 
 
 class Py4Js():
@@ -90,24 +90,21 @@ def readSrtFile():
             if i % 5 == 2:
                 enStr = srtList[i]
                 enList.append(enStr)
-                # print(enList)
-            
-            if len(enList) % 10 == 0 and len(enList) != 0:
+                # print (enList)
+
+            string = "";
+            # print (len(enList))
+            if len(enList) == 10:
                 # 这边应该翻译并且替换
-                print(len(enList))
-                print(enList)
-                enList = []
+                # print (enList)
+                for j in range(len(enList)):
+                    string = "%s\n%s" %(string, enList[j])
+                print (string)
+
+                # # print(translate(str))
+                # enList = []
             
-            
-        
-                
-        
-        
-            
-            
-            
-            
-            
+
         # for i in range(len(srtList)):
         #     if i%5 == 2:
         #         print(srtList[i]);
