@@ -1,7 +1,8 @@
-import re
 import execjs
 import urllib
-import urllib.request.quote
+import urllib.request
+
+file_Path = "/Users/chenzuo/Desktop/saoce shooter STR/01-Setting up the project.srt";
 
 
 class Py4Js():
@@ -50,8 +51,8 @@ class Py4Js():
 
 def open_url(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
-    req = urllib.Request(url=url, headers=headers)
-    response = urllib.urlopen(req)
+    req = urllib.request.Request(url=url, headers=headers)
+    response = urllib.request.urlopen(req)
     data = response.read().decode('utf-8')
     return data
 
@@ -60,9 +61,9 @@ def translate(content):
     js = Py4Js()
     tk = js.getTk(content)
 
-    content = urllib.quote(content)
+    content = urllib.parse.quote(content)
     url = "http://translate.google.cn/translate_a/single?client=t" \
-          "&sl=zh-CN&tl=EN&hl=EN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca" \
+          "&sl=EN&tl=zh-CN&hl=EN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca" \
           "&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&clearbtn=1&otf=1&pc=1" \
           "&srcrom=0&ssel=0&tsel=0&kc=2&tk=%s&q=%s" % (tk, content)
 
@@ -72,14 +73,47 @@ def translate(content):
         texts = result[4:end]
     return texts
 
+# 读取srt文件
+def readSrtFile():
+    with open(file_Path, encoding='utf-8') as file:
+        srt = file.read()
+        srtList = srt.split("\n")
+        
+
+        # 一行有五个，包括空的那一行，为了防止请求过快，每10句请求一次
+
+        enList = []
+        
+        for i in range(len(srtList)):
+            
+            
+            if i % 5 == 2:
+                enStr = srtList[i]
+                enList.append(enStr)
+                # print(enList)
+            
+            if len(enList) % 10 == 0 and len(enList) != 0:
+                # 这边应该翻译并且替换
+                print(len(enList))
+                print(enList)
+                enList = []
+            
+            
+        
+                
+        
+        
+            
+            
+            
+            
+            
+        # for i in range(len(srtList)):
+        #     if i%5 == 2:
+        #         print(srtList[i]);
+        #         print (translate(srtList[i]))
+        
+
 
 if __name__ == "__main__":
-    text = "很多的不满意。书中竟然都有错别字以及句子结构的错误?故事讲得也不好。"
-    texts = text.split('。')
-    results = ''
-    for i in range(len(texts)):
-        try:
-            results = results + "," + translate(str(texts[i]))
-        except Exception as e:
-            print(e)
-    print(results)
+    readSrtFile();
