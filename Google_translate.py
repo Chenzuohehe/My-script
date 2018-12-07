@@ -1,8 +1,9 @@
 import execjs
 import urllib
 import urllib.request
+import time
 
-file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/01-Setting up the project.srt";
+file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/01.srt";
 
 
 class Py4Js():
@@ -63,7 +64,7 @@ def translate(content):
 
     content = urllib.parse.quote(content)
     url = "http://translate.google.cn/translate_a/single?client=t" \
-          "&sl=EN&tl=zh-CN&hl=EN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca" \
+          "&sl=en&tl=zh-CN&hl=EN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca" \
           "&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&clearbtn=1&otf=1&pc=1" \
           "&srcrom=0&ssel=0&tsel=0&kc=2&tk=%s&q=%s" % (tk, content)
 
@@ -78,28 +79,45 @@ def readSrtFile():
     with open(file_Path, encoding='utf-8') as file:
         srt = file.read()
         srtList = srt.split("\n")
-        
 
         # 一行有五个，包括空的那一行，为了防止请求过快，每10句请求一次
 
+        # len(srtList) == 170 * 5,获取所有英语短句 englist == 所有英文短句
         enList = []
-        
         for i in range(len(srtList)):
-            
-            
             if i % 5 == 2:
                 enStr = srtList[i]
                 enList.append(enStr)
-                # print (enList)
 
-            string = "";
-            # print (len(enList))
-            if len(enList) == 10:
-                # 这边应该翻译并且替换
-                # print (enList)
-                for j in range(len(enList)):
-                    string = "%s\n%s" %(string, enList[j])
-                print (string)
+
+
+
+
+        # 生成10句一起的字符串，翻译，拆分，重新写入
+        string = "";
+        for j in range(len(enList)):
+            if j == len(enList)-1:
+                 # 这是最后一个
+                 print(j)
+            elif j % 10 == 0 and i != 0:
+                print(j)
+                print('我是标记')
+
+
+
+                # string = "%s\n%s" % (string, enList[j])
+
+
+            # string = "";
+            # if len(enList) % 10 != 0:
+            #
+            #
+            #     # 如果整除
+            #     # print (enList)
+            #     for j in range(len(enList)):
+            #         string = "%s\n%s" %(string, enList[j])
+            #         print (string)
+
 
                 # # print(translate(str))
                 # enList = []
@@ -109,8 +127,27 @@ def readSrtFile():
         #     if i%5 == 2:
         #         print(srtList[i]);
         #         print (translate(srtList[i]))
-        
+
+
+# 读取srt文件
+def readAndReplaceSrtFile():
+    with open(file_Path, encoding='utf-8') as file:
+        srt = file.read()
+        srtList = srt.split("\n")
+
+        for i in range(len(srtList)):
+
+            if i % 5 == 2:
+                # print(srtList[i])
+                translate(srtList[i])
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
-    readSrtFile();
+
+    readAndReplaceSrtFile();
