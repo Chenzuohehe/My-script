@@ -31,7 +31,7 @@ class email_model:
     subjects = []
 
 
-# 假设21行开始
+# 假设21行开始 xianzai xieyi xie shenme jiaoben ne youshenme chongfu xing hengaode huodong shengcheng P12wenjian
 
 # 获取用户名密码 list
 def set_users_passwords(start_cow, end_cow):
@@ -250,10 +250,11 @@ def creat_excel(email_objects):
     find_key_world("Notice of Termination", "E", "4169E1")
 
     # 当标题里面包含Notice of Termination 标色
+    # yueguoshanqu ,woyaozuoyige meiyou mubiao de xianyu le ma ,kenengxianshi jiushi zheyangde ba 
 
     work_book.save("查看邮件" + ".xlsx")
 
-
+# 删除 包含关键字的
 
 
 if __name__ == '__main__':

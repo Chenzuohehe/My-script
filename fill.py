@@ -9,20 +9,24 @@ import time
 # 目标苹果开发者账户然后创建证书，添加UDID，添加B ID，生成配置文件
 
 
-appleID = "xiaozhi576753@163.com"
+appleID = "nihuangpiao81@163.com"
 password = "Gg104123"
 CRSfilePath = "/Users/chenzuo/Desktop/udid集合/CertificateSigningRequest.certSigningRequest"
-appName = "jiuzhoumilingji"
-aName = "jzmlj"
+appName = "shenglingqiji"
+aName = "slqj"
 bundleID = "com." + appName + "." + aName
-appChineseName = "九州觅灵记"
+appChineseName = "圣灵奇迹"
 # udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/太古udid.txt"]
 # udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt"]
 # udids = ["/Users/chenzuo/Desktop/udid集合/青云诀.txt"]
 # udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/百战UDID.txt"]
 # udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/老爷UDID.txt"]
 # udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/逐鹿UDID.txt"]
-udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/苍穹灭UDID.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/苍穹灭UDID.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/松鼠测试人员udid.txt", "/Users/chenzuo/Desktop/udid集合/青云诀2.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/ta_udid.txt"]
+# udids = ["/Users/chenzuo/Desktop/udid集合/wzwy_udid.txt"]
+udids = ["/Users/chenzuo/Desktop/udid集合/hero_udid.txt"]
 
 
 waitSec = 6
@@ -73,7 +77,9 @@ def ceartCeetificates(index):
     # 继续 continue
 
     time.sleep(waitSec)
+    # driver.find_elements_by_xpath("//*[@type='radio']")
     driver.find_element_by_xpath("//*[@name='upload']").send_keys(CRSfilePath)
+    # driver.find_element_by_xpath("//*[@type='file']").send_keys(CRSfilePath)
     driver.find_element_by_xpath("//*[@class='button small blue submit ']").click()
     # CSR文件上传成功 继续
 
@@ -177,37 +183,11 @@ def openiTunesConnect():
     driver.find_element_by_xpath("//*[@class='button-3d-blue font-semibold']").click()
 
 #
-def openiTunesType(index):
-    time.sleep(waitSec)
-    driver.get("https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app")
-    time.sleep(waitSec)
+# def openiTunesType(index):
+#     time.sleep(waitSec)
+#     driver.get("https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app")
+#     time.sleep(waitSec)
 
-# 添加新APP
-def addNewApp():
-    time.sleep(waitSec)
-
-    # 一般这边很慢需要更多的加载时间
-    driver.find_element_by_xpath("//*[@class='new-button ng-isolate-scope']").click()
-    time.sleep(waitSec)
-    driver.find_element_by_xpath("//*[@ng-click='launchCreateNewApp(iosString)']").click()
-    # +新建APP
-    time.sleep(waitSec)
-    driver.find_element_by_xpath("//*[@class='checkboxstyle']").click()
-    # 选择平台 iOS
-    driver.find_element_by_xpath("//*[@ng-model='createAppDetails.name.value']").send_keys(appChineseName)
-    #添加名称
-    driver.find_element_by_xpath("//*[@value='string:zh-Hans']").click()
-
-    # 找到所有选择项，选择简体中文
-    name = "string:%s" %(bundleID)
-    print("//*[@value='%s']" %(name))
-    # 暂时先用chenzuo - com.chenzuo.cz
-    name = "string:com.chenzuo.cz"
-    driver.find_element_by_xpath("//*[@value='%s']" %(name)).click()
-    driver.find_element_by_xpath("//*[@ng-model='createAppDetails.vendorId.value']").send_keys(bundleID)
-    # 找到对应的
-    driver.find_element_by_xpath("//*[@ng-click='saveApp()']").click()
-    time.sleep(waitSec*1.5)
 
 if __name__ == '__main__':
     print(bundleID)
@@ -215,7 +195,7 @@ if __name__ == '__main__':
     login()
     openCIP()
 
-    # creatAppId() #生成appid
+    creatAppId() #生成appid
     addDevices()  # 根据txt地址添加UDID
 
     ceartCeetificates(0)#生成开发证书
@@ -228,14 +208,4 @@ if __name__ == '__main__':
     addProfiles(2) #生成生产配置文件
     addProfiles(4) #生成Hoc配置文件
     # openiTunesConnect()
-    # addNewApp()
-
-
-
-
-
-
-
-
-
 

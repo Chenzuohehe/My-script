@@ -3,7 +3,7 @@ import urllib
 import urllib.request
 import time
 
-file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/01.srt";
+file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/04-Adding a background.srt";
 # file_Path = "/Users/chenzuo/Desktop/unity3d-youtube/saoce shooter STR/01.txt";
 
 
@@ -82,17 +82,21 @@ def translate(content):
 def readAndReplaceSrtFile():
     with open(file_Path, encoding='utf-8', mode='r+') as file:
         srt = file.read()
+        print("读取完毕")
         srtList = srt.split("\n")
         tSrt = ""
 
         for i in range(len(srtList)):
             if i % 5 == 2 and i != len(srtList):
+                print ("翻译" + str(i))
                 srtList[i + 1] = translate(srtList[i])
             tSrt = tSrt + "\n" + srtList[i]
 
+        print("翻译完毕")
         file.seek(0)
         file.truncate()
         file.write(tSrt)
+        print("写入完成")
 
 
 if __name__ == "__main__":
