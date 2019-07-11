@@ -18,14 +18,20 @@ def dir_rename(dir_path):
         sub_dir_path = dir_path + "/" + dir
         # print (sub_dir_path)
 
+        print (sub_dir_path)
+        # print (new_dir)
+
         if os.path.isdir(sub_dir_path):
             # 对于子文件夹同样进行遍历
             dir_rename(sub_dir_path)
-
         # 修改名称
-        if old_keyword in dir:
-            new_dir = dir.replace(old_keyword, new_keyword)
-            os.rename(dir_path + "/" + dir, dir_path + "/" + new_dir)
+        # if old_keyword in dir:
+        #     new_dir = dir.replace(old_keyword, new_keyword)
+        #     print (dir)
+        #     print (new_dir)
+
+            # os.rename(dir_path + "/" + dir, dir_path + "/" + new_dir)
+
 
 
 if __name__ == '__main__':

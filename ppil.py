@@ -13,7 +13,7 @@ baseP = "/Users/chenzuo/Desktop"
 width, height = im.size
 # 宽高
 print(im.size, width, height)
-# 格式，以及格式的详细描述
+# 格式，以及格式的详细描述s
 print(im.format, im.format_description)
 
 # im.save(r'/Users/chenzuo/Desktop/test1.png')
@@ -82,19 +82,3 @@ im.filter(ImageFilter.SHARPEN).save(r'%s/SHARPEN.png' %(baseP))
 im.filter(ImageFilter.SMOOTH).save(r'%s/SMOOTH.png' %(baseP))
 # 细节
 im.filter(ImageFilter.DETAIL).save(r'%s/DETAIL.png' %(baseP))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
