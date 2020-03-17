@@ -2,6 +2,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment
 from openpyxl import load_workbook
 
+
 # 
 # 
 # 
@@ -17,6 +18,16 @@ excel = load_workbook("/Users/chenzuo/Desktop/321.xlsx")
 # 获取sheet：
 # table = excel['Sheet1']  # 通过表名获取
 table = excel.get_sheet_by_name("Sheet1")
+
+## 读取特定行，读取单双跳跃的那种，形成新的表格
+## 预留一个费用日期，费用名称单数行，费用数量，费用单价，费用金额，费用类别，费用科室
+#
+#excel = load_workbook("/Users/chenzuo/Desktop/test1.xlsx")
+#
+#print(excel.sheetnames)
+## 获取sheet：
+#table = excel["Sheet1"]  # 通过表名获取
+## table = excel.get_sheet_by_name("Sheet1")
 # 获取行数和列数：
 rows = table.max_row  # 获取行数 从上往下数
 cols = table.max_column  # 获取列数
@@ -31,7 +42,6 @@ for i in range(rows):
 
     if i % 2 == 1 and i >= 11:
         # 9 11 13 15 16
-        # 费用日期
         # 判断有没有，没有就沿用之前的
         # fee_date = "1"
         fee_date_1 = table.cell(row=i, column=1).value
@@ -61,7 +71,6 @@ for i in range(rows):
 
         list = [fee_date, fee_name, fee_num, fee_unit_price, fee_total_price, fee_type, fee_department]
         booksheet.append(list)
-        print(list)
 
 # 填写表格
 
